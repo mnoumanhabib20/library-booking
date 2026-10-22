@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta name="description" content="Reserve a seat in the Smart Lab and view live seat availability.">
+  <title>Smart Lab Seats | Reservation Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Smart Lab Seats home">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span class="brand-copy"><strong>Smart Lab Seats</strong><span>Reservation portal</span></span>
+    </a>
+    <button type="button" id="adminPortalBtn" class="btn admin-trigger">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6l-7-3Zm0 4a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Zm0 10.5a7.1 7.1 0 0 1-4.3-1.4c.1-2 2.9-3.1 4.3-3.1s4.2 1.1 4.3 3.1a7.1 7.1 0 0 1-4.3 1.4Z"/></svg>
+      <span>Admin Portal</span>
+    </button>
+  </header>
+
+  <main class="page-shell">
+    <section class="welcome">
+      <div>
+        <p class="eyebrow"><span class="live-dot"></span> LIVE LAB AVAILABILITY</p>
+        <h1>Find your place<br><span>to focus.</span></h1>
+        <p class="welcome-copy">Choose an open seat in the computer lab. Your reservation is saved instantly.</p>
+      </div>
+      <div class="welcome-aside" aria-label="Lab capacity">
+        <span class="capacity-icon" aria-hidden="true">⌘</span>
+        <div><strong>30</strong><span>seats in the lab</span></div>
+      </div>
+    </section>
+
+    <div class="dashboard">
+      <section class="panel lab-panel" aria-labelledby="mapTitle">
+        <div class="panel-heading">
+          <div><p class="eyebrow">SEATING PLAN</p><h2 id="mapTitle">Choose your seat</h2></div>
+          <span class="live-label"><span class="live-dot"></span> Updates live</span>
+        </div>
+        <div class="screen-wrap">
+          <div class="screen"><span class="screen-light"></span> INSTRUCTOR SCREEN</div>
+        </div>
+        <div id="seatGrid" class="seat-grid" role="group" aria-label="Lab seats, rows A to E and columns 1 to 6"></div>
+        <ul class="legend" aria-label="Seat status legend">
+          <li><span class="legend-dot free"></span>Available</li>
+          <li><span class="legend-dot selected"></span>Your selection</li>
+          <li><span class="legend-dot reserved"></span>Reserved</li>
+        </ul>
+        <p class="map-footnote"><span aria-hidden="true">i</span> Select any available seat to get started.</p>
+      </section>
+
+      <aside class="panel booking-panel" aria-labelledby="bookingTitle">
+        <div class="panel-heading compact-heading">
+          <div><p class="eyebrow">YOUR RESERVATION</p><h2 id="bookingTitle">Book a seat</h2></div>
+          <span class="booking-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="stats">
+          <div class="stat-card"><span class="stat-icon available-icon" aria-hidden="true">✓</span><div><strong id="freeCount">30</strong><span>Available</span></div></div>
+          <div class="stat-card"><span class="stat-icon reserved-icon" aria-hidden="true">●</span><div><strong id="takenCount">0</strong><span>Reserved</span></div></div>
+        </div>
+        <form id="seatForm" novalidate>
+          <label for="seatLabel">Selected seat</label>
+          <div class="input-wrap seat-input-wrap"><span aria-hidden="true">⌖</span><input id="seatLabel" type="text" readonly placeholder="Choose a seat from the map"></div>
+          <label for="studentId">Student ID</label>
+          <div class="input-wrap"><span aria-hidden="true">#</span><input id="studentId" type="text" maxlength="9" placeholder="e.g. F26607109" autocomplete="off" autocapitalize="characters" aria-describedby="idHint"></div>
+          <p id="idHint" class="field-hint">Use your F-number (F followed by 8 digits). One reservation per student.</p>
+          <label for="studentName">Student name</label>
+          <div class="input-wrap"><span aria-hidden="true">Aa</span><input id="studentName" type="text" maxlength="80" placeholder="Enter your full name" autocomplete="name" aria-describedby="nameHint"></div>
+          <p id="nameHint" class="field-hint">Enter the name associated with your student ID.</p>
+          <p id="message" class="message" role="status" aria-live="polite"></p>
+          <button type="submit" id="reserveBtn" class="btn primary-btn"><span>Reserve this seat</span><span aria-hidden="true">→</span></button>
+        </form>
+        <section id="adminPanel" class="admin-panel" aria-labelledby="adminHeading" hidden>
+          <div class="admin-panel-heading"><div><p class="eyebrow">MANAGEMENT</p><h3 id="adminHeading" tabindex="-1">Admin controls</h3></div><button type="button" id="adminLogoutBtn" class="text-btn">Sign out</button></div>
+          <p class="admin-note">Select one or more reserved seats on the map to review or cancel their assignments together.</p>
+          <div class="admin-actions">
+            <label for="rowSelect">Reset a row</label>
+            <div class="row-action"><select id="rowSelect" aria-label="Choose row to reset"><option value="0">Row A</option><option value="1">Row B</option><option value="2">Row C</option><option value="3">Row D</option><option value="4">Row E</option></select><button type="button" id="clearRowBtn" class="btn secondary-btn">Clear row</button></div>
+            <button type="button" id="clearSelectedBtn" class="btn secondary-btn">Cancel selected reservations</button>
+            <div class="file-actions">
+              <button type="button" id="exportBtn" class="btn secondary-btn">Save lab_seats.txt</button>
+              <button type="button" id="importBtn" class="btn secondary-btn">Load lab_seats.txt</button>
+              <input id="importFile" type="file" accept=".txt,text/plain" hidden>
+            </div>
+            <button type="button" id="resetBtn" class="btn danger-btn">Clear all / Reset lab</button>
+          </div>
+        </section>
+        <div class="privacy-note"><span aria-hidden="true">◈</span><span>Seat availability is synced across tabs on this browser.</span></div>
+      </aside>
+    </div>
+    <footer class="page-footer"><span>SMART LAB SEAT RESERVATION</span><span>Designed for focused learning <span aria-hidden="true">✦</span></span></footer>
+  </main>
+
+  <div id="adminModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle" aria-describedby="loginDescription">
+      <button type="button" class="modal-close" id="closeModalBtn" aria-label="Close admin login">×</button>
+      <div class="modal-icon" aria-hidden="true">⌑</div>
+      <p class="eyebrow">RESTRICTED ACCESS</p>
+      <h2 id="loginTitle">Welcome, administrator</h2>
+      <p id="loginDescription" class="modal-copy">Sign in to manage lab reservations and file operations.</p>
+      <form id="adminLoginForm" novalidate>
+        <label for="adminUsername">Username</label>
+        <input id="adminUsername" type="text" autocomplete="username" required>
+        <label for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" required>
+        <p id="loginMessage" class="message" role="alert"></p>
+        <button type="submit" class="btn primary-btn">Sign in to admin portal <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="demo-warning">Demo access control only. Use a secured server for real credentials and multi-device access.</p>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
